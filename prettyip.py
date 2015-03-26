@@ -77,7 +77,3 @@ def pretty_ipset(ipset):
             best_score = score
 
     return best
-
-from IPy import IPSet, IP
-print pretty_ipset(IPSet([IP('10.0.0.3'), IP('10.0.0.4/31'), IP('10.0.0.8/29'), IP('10.0.0.7')]))
-print pretty_ipset(IPSet([IP('10.0.0.15'), IP('10.0.0.16/31'), IP('10.0.0.18'), IP('10.0.0.7')]))

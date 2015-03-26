@@ -6,7 +6,7 @@ import contextlib
 from nose.tools import eq_
 from IPy import IP, IPSet
 
-import ippretty
+import prettyip
 
 current_representer = None
 
@@ -33,7 +33,7 @@ def representer(fn):
 
 
 def test_singleton():
-    with representer(ippretty.singleton):
+    with representer(prettyip.singleton):
         yield (t, s('1.2.3.0/24'),
                [(1.0, '1.2.3.0/24')])
         yield (t, s('1.2.3.0/24', '1.1.1.1'),
@@ -41,7 +41,7 @@ def test_singleton():
 
 
 def test_empty():
-    with representer(ippretty.empty):
+    with representer(prettyip.empty):
         yield (t, s(),
             [(0.0, 'nothing')])
         yield (t, s('1.2.3.0/24', '1.1.1.1'),
@@ -49,7 +49,7 @@ def test_empty():
 
 
 def test_range():
-    with representer(ippretty.range):
+    with representer(prettyip.range):
         yield (t, s('1.0.0.3', '1.0.0.4/31', '1.0.0.6'),
             [(2.0, '1.0.0.{3-6}')])
 
@@ -62,7 +62,7 @@ def test_range():
 
 def test_integration():
     def i(input, output):
-        eq_(ippretty.pretty_ipset(input), output)
+        eq_(prettyip.pretty_ipset(input), output)
     yield i, s(), 'nothing'
     yield i, s('1.2.3.4'), '1.2.3.4'
     yield i, s('1.2.3.0/24'), '1.2.3.0/24'
