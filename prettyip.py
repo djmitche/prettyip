@@ -47,7 +47,7 @@ def range(ipset):
         prefix = os.path.commonprefix([start, end])
         pfxlen = len(prefix)
         start, end = start[pfxlen:], end[pfxlen:]
-        return '{}{{{}-{}}}'.format(prefix, start, end)
+        return '{0}{{{1}-{2}}}'.format(prefix, start, end)
 
     yield (len(ranges) + 1.0,
            # TODO: format these better when they have a common prefix
@@ -72,8 +72,8 @@ def pretty_ipset(ipset):
     best = None
     best_score = None
     for score, rep in _representations_for(ipset):
-        print "considering %r with score %r" % (rep, score)
-        if score < best_score or best_score is None:
+        print("considering %r with score %r" % (rep, score))
+        if best_score is None or score < best_score:
             best = rep
             best_score = score
 
