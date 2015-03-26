@@ -72,7 +72,7 @@ def pretty_ipset(ipset):
     best = None
     best_score = None
     for score, rep in _representations_for(ipset):
-        print("considering %r with score %r" % (rep, score))
+        print("considering {!r} with score {!r}".format(rep, score))
         if best_score is None or score < best_score:
             best = rep
             best_score = score
