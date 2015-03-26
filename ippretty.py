@@ -4,20 +4,28 @@
 
 import os
 
-_representers = []
-_representer = _representers.append
+representers = []
 
 
-@_representer
-def singleton_ipset(ipset):
+def representer(fn):
+    representers.append(fn)
+    return fn
+
+
+@representer
+def singleton(ipset):
     if len(ipset.prefixes) == 1:
         yield (1.0, str(ipset.prefixes[0]))
-    elif len(ipset.prefixes) == 0:
-        yield (0.0, 'empty')
 
 
-@_representer
-def _range(ipset):
+@representer
+def empty(ipset):
+    if len(ipset.prefixes) == 0:
+        yield (0.0, 'nothing')
+
+
+@representer
+def range(ipset):
     if len(ipset.prefixes) == 0:
         return
 
@@ -40,20 +48,21 @@ def _range(ipset):
         start, end = start[pfxlen:], end[pfxlen:]
         return '{}{{{}-{}}}'.format(prefix, start, end)
 
-    yield (len(ranges),
+    yield (len(ranges) + 1.0,
            # TODO: format these better when they have a common prefix
            ", ".join(fmtrange(s, e) for s, e in ranges))
 
 # TODO: sets on class boundaries
 # TODO: inversions
 
-@_representer
+
+@representer
 def _repr(ipset):
-    yield (1000.0, str(ipset))
+    yield (100.0, ", ".join(str(ip) for ip in ipset.prefixes))
 
 
 def _representations_for(ipset):
-    for representer in _representers:
+    for representer in representers:
         for score, rep in representer(ipset):
             yield score, rep
 
