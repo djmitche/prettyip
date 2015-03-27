@@ -32,6 +32,6 @@ setup(
     py_modules=['prettyip', 'test_prettyip'],
     install_requires=['IPy'],
     extras_require={
-        'test': ['nose'],
+        'test': ['nose', 'mock'],
     },
 )

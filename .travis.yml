@@ -7,7 +7,7 @@ python:
   - "3.4"
 
 install:
-  - "pip install . pep8"
+  - "pip install .[test] pep8"
 
 script:
   - nosetests

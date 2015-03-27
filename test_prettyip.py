@@ -2,6 +2,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+import mock
 import contextlib
 from nose.tools import eq_
 from IPy import IP, IPSet
@@ -24,12 +25,25 @@ def t(input, output):
 @contextlib.contextmanager
 def representer(fn):
     "Set the current representer"
-    global current_representer
-    current_representer = fn
-    try:
-        yield
-    finally:
-        current_representer = None
+    with patched_reresentations_for():
+        global current_representer
+        current_representer = fn
+        try:
+            yield
+        finally:
+            current_representer = None
+
+
+@contextlib.contextmanager
+def patched_reresentations_for():
+    """Patch representations_for so that it does not recurse to other
+    representers but returns a fixed string"""
+    with mock.patch('prettyip.representations_for') as reps_for:
+        def fake(ipset, ignore=None):
+            ipstrs = ', '.join(str(ip) for ip in ipset.prefixes)
+            yield (99.9, 'reps_for({0})'.format(ipstrs))
+        reps_for.side_effect = fake
+        yield reps_for
 
 
 def test_singleton():
@@ -43,21 +57,41 @@ def test_singleton():
 def test_empty():
     with representer(prettyip.empty):
         yield (t, s(),
-            [(0.0, 'nothing')])
+               [(0.0, 'nothing')])
         yield (t, s('1.2.3.0/24', '1.1.1.1'),
-            [])
+               [])
 
 
 def test_range():
-    with representer(prettyip.range):
+    with representer(prettyip.dashed_range):
         yield (t, s('1.0.0.3', '1.0.0.4/31', '1.0.0.6'),
-            [(2.0, '1.0.0.{3-6}')])
+               [(1.0, '1.0.0.{3-6}')])
 
         yield (t, s('1.0.0.0/24') - s('1.0.0.0'),
-            [(2.0, '1.0.0.{1-255}')])
+               [(1.0, '1.0.0.{1-255}')])
 
+        # a singleton in the middle
+        yield (t, s('1.0.0.0/24') - s('1.0.0.17') - s('1.0.0.19'),
+               [(3.25, '1.0.0.{0-16}, 1.0.0.18, 1.0.0.2{0-55}')])
+
+        # CIDR range
         yield (t, s('1.0.0.0/24') - s('1.0.0.128'),
-            [(3.0, '1.0.0.{0-127}, 1.0.0.{129-255}')])
+               [(1.5, '1.0.0.0/25, 1.0.0.{129-255}')])
+
+
+def test_except_for():
+    with representer(prettyip.except_for):
+        yield (t, s('1.0.0.0/20') - s('1.0.1.128'),
+               [(100.9, '1.0.0.0/20 except reps_for(1.0.1.128)')])
+
+        yield (t, s('1.0.0.0/17') + s('1.0.128.0/17') - s('1.0.1.128'),
+               [(100.9, '1.0.0.0/16 except reps_for(1.0.1.128)')])
+
+
+def test_prefix_list():
+    with representer(prettyip.prefix_list):
+        yield (t, s('1.0.0.0/24', '2.0.0.0/15', '3.0.0.0/8'),
+               [(30.0, '1.0.0.0/24, 2.0.0.0/15, 3.0.0.0/8')])
 
 
 def test_integration():
@@ -70,3 +104,9 @@ def test_integration():
     yield i, s('1.2.0.0/16'), '1.2.0.0/16'
     yield i, s('1.2.3.0/24'), '1.2.3.0/24'
     yield i, s('1.2.3.4'), '1.2.3.4'  # no /32 suffix
+    yield i, s('1.0.0.0/20') - s('1.0.1.128'), \
+        '1.0.0.0/20 except 1.0.1.128'
+    yield i, s('1.0.0.0/8') - s('1.0.1.0/24') - s('1.0.9.0/24'), \
+        '1.0.0.0/8 except 1.0.1.0/24, 1.0.9.0/24'
+    yield i, s('1.0.0.0/8') - s('1.15.0.0/16') + s('1.15.20.0/24'), \
+        '1.0.0.0/8 except 1.15.{0.0-19.255}, 1.15.2{1.0-55.255}'
