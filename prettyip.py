@@ -91,7 +91,6 @@ def except_for(ipset):
     smallest_containing = IP('0.0.0.0/0')
     for bitlength in range(1, 24):
         low_half = mkip(lower, bitlength)
-        # this doesn't work :(
         if ipset_in_ip(ipset, low_half):
             smallest_containing = low_half
             continue
