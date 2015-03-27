@@ -8,9 +8,16 @@ from setuptools import setup
 
 import os.path
 
+import versioneer
+versioneer.VCS = 'git'
+versioneer.versionfile_source = 'version.py'
+versioneer.versionfile_build = None
+versioneer.tag_prefix = ''
+versioneer.parentdir_prefix = 'prettyip-'
+
 setup(
     name='prettyip',
-    version='1.0.4',
+    version=versioneer.get_version(),
     description="Pretty-print IPy's IPSets ",
     long_description=open(os.path.join(os.path.dirname(__file__), 'README.rst')).read(),
     url='https://github.com/djmitche/prettyip',
@@ -34,4 +41,5 @@ setup(
     extras_require={
         'test': ['nose', 'mock'],
     },
+    cmdclass=versioneer.get_cmdclass(),
 )
