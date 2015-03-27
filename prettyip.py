@@ -107,8 +107,8 @@ def except_for(ipset):
         print("except_for starting with {0!r} except {1!r}".
               format(smallest_containing, inverted))
         for score, rep in representations_for(inverted, ignore=[except_for]):
-            print(
-                "except_for considering {0!r} with score {1!r}".format(rep, score))
+            print("except_for considering {0!r} with score {1!r}".
+                  format(rep, score))
             yield score + 1, prefix + rep
 
 
