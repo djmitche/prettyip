@@ -39,14 +39,14 @@ Results
 
 Simple IPs:
 
-.. code-sample:: none
+.. code-block:: none
 
      >>> prettyip.pretty_ipset(IPSet([IP('10.0.0.0/8')]))
     '10.0.0.0/8'
 
 Ranges:
 
-.. code-sample:: none
+.. code-block:: none
 
     >>> IPSet([IP('10.120.13.11'), IP('10.120.13.12/30'), IP('10.120.13.16')])
     IPSet([IP('10.120.13.11'), IP('10.120.13.12/30'), IP('10.120.13.16')])
@@ -55,7 +55,7 @@ Ranges:
 
 Big netblocks with smaller pieces missing:
 
-.. code-sample:: none
+.. code-block:: none
 
      >>> IPSet([IP('1.0.0.0/8')]) - IPSet([IP('1.0.1.0/24')]) - IPSet([IP('1.0.9.0/24')])
      IPSet([IP('1.0.0.0/24'), IP('1.0.2.0/23'), IP('1.0.4.0/22'),
