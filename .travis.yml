@@ -10,7 +10,7 @@ install:
   - "pip install -e .[test] pep8 coverage coveralls"
 
 script:
-  - nosetests nosetests --with-coverage --cover-package=prettyip
+  - nosetests --with-coverage --cover-package=prettyip
   - pep8 prettyip.py
 
 after_success:
