@@ -58,7 +58,10 @@ def dashed_range(ipset):
         # calculate th score for this range, penalizing for shorter
         # prefixes (longer dashed ranges) and for not ending on a dot
         score = 4.0 - prefix.count('.')
-        if prefix[-1] != '.':
+        if not prefix:
+            # wrapping {..} around the whole ipset is not readable!
+            score += 100.0
+        elif prefix[-1] != '.':
             score += 1.0
         return score, '{0}{{{1}-{2}}}'.format(prefix, start, end)
 
