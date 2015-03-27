@@ -131,3 +131,7 @@ def pretty_ipset(ipset):
             best_score = score
 
     return best
+
+
+def patch_ipy():
+    IPSet.__str__ = pretty_ipset
