@@ -9,6 +9,6 @@ if test -z "$VERSION"; then
 fi
 
 git tag $VERSION
-rm dist/*
+rm -rf dist/*
 python setup.py sdist bdist_wheel
 twine upload -s dist/*
