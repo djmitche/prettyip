@@ -104,11 +104,7 @@ def except_for(ipset):
     if smallest_containing:
         prefix = "%s except " % (smallest_containing)
         inverted = IPSet([smallest_containing]) - ipset
-        print("except_for starting with {0!r} except {1!r}".
-              format(smallest_containing, inverted))
         for score, rep in representations_for(inverted, ignore=[except_for]):
-            print("except_for considering {0!r} with score {1!r}".
-                  format(rep, score))
             yield score + 1, prefix + rep
 
 
@@ -130,7 +126,6 @@ def pretty_ipset(ipset):
     best = None
     best_score = None
     for score, rep in representations_for(ipset):
-        print("considering {0!r} with score {1!r}".format(rep, score))
         if best_score is None or score < best_score:
             best = rep
             best_score = score
