@@ -10,7 +10,7 @@ import os.path
 
 setup(
     name='prettyip',
-    version='1.0.0',
+    version='1.0.2',
     description="Pretty-print IPy's IPSets ",
     long_description=open(os.path.join(os.path.dirname(__file__), 'README.rst')).read(),
     url='https://github.com/djmitche/prettyip',
