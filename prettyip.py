@@ -88,7 +88,7 @@ def except_for(ipset):
         return True
 
     lower = 0
-    smallest_containing = None
+    smallest_containing = IP('0.0.0.0/0')
     for bitlength in range(1, 24):
         low_half = mkip(lower, bitlength)
         # this doesn't work :(

@@ -91,6 +91,9 @@ def test_except_for():
         yield (t, s('1.0.0.0/17') + s('1.0.128.0/17') - s('1.0.1.128'),
                [(100.9, '1.0.0.0/16 except reps_for(1.0.1.128)')])
 
+        yield (t, s('0.0.0.0/0') - s('172.16.2.0/24'),
+               [(100.9, '0.0.0.0/0 except reps_for(172.16.2.0/24)')])
+
 
 def test_prefix_list():
     with representer(prettyip.prefix_list):
