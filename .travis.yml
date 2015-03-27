@@ -7,7 +7,7 @@ python:
   - "3.4"
 
 install:
-  - "pip install .[test] pep8 coverage coveralls"
+  - "pip install -e .[test] pep8 coverage coveralls"
 
 script:
   - nosetests nosetests --with-coverage --cover-package=prettyip
