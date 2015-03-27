@@ -99,7 +99,7 @@ def test_integration():
         eq_(prettyip.pretty_ipset(input), output)
     yield i, s(), 'nothing'
     for bits in range(0, 32):
-        yield i, s('0.0.0.0/{}'.format(bits)), '0.0.0.0/{}'.format(bits)
+        yield i, s('0.0.0.0/{0}'.format(bits)), '0.0.0.0/{0}'.format(bits)
     yield i, s('1.0.0.0/8'), '1.0.0.0/8'
     yield i, s('1.2.0.0/16'), '1.2.0.0/16'
     yield i, s('1.2.3.0/24'), '1.2.3.0/24'
