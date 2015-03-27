@@ -5,9 +5,10 @@
 from IPy import IP, IPSet
 import os
 
-POWERS_OF_2 = dict((2 ** n, n) for n in range(0, 32+1))
+POWERS_OF_2 = dict((2 ** n, n) for n in range(0, 32 + 1))
 
 representers = []
+
 
 def representer(fn):
     representers.append(fn)
@@ -65,6 +66,7 @@ def dashed_range(ipset):
     score = sum(range_score for (range_score, _) in scored_formats)
     yield score, ", ".join(range_fmt for (_, range_fmt) in scored_formats)
 
+
 @representer
 def except_for(ipset):
     # this isn't worth it for simple sets
@@ -105,7 +107,8 @@ def except_for(ipset):
         print("except_for starting with {!r} except {!r}".
               format(smallest_containing, inverted))
         for score, rep in representations_for(inverted, ignore=[except_for]):
-            print("except_for considering {!r} with score {!r}".format(rep, score))
+            print(
+                "except_for considering {!r} with score {!r}".format(rep, score))
             yield score + 1, prefix + rep
 
 
