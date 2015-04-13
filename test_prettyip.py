@@ -25,7 +25,7 @@ def t(input, output):
 @contextlib.contextmanager
 def representer(fn):
     "Set the current representer"
-    with patched_reresentations_for():
+    with patched_representations_for():
         global current_representer
         current_representer = fn
         try:
@@ -35,7 +35,7 @@ def representer(fn):
 
 
 @contextlib.contextmanager
-def patched_reresentations_for():
+def patched_representations_for():
     """Patch representations_for so that it does not recurse to other
     representers but returns a fixed string"""
     with mock.patch('prettyip.representations_for') as reps_for:
