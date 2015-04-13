@@ -37,10 +37,10 @@ def dashed_range(ipset):
     for pfx in ipset.prefixes:
         pfx_int = pfx.int()
         if range is None or pfx_int != range[1] + 1:
-            range = [pfx_int, pfx_int + len(pfx) - 1]
+            range = [pfx_int, pfx_int + pfx.len() - 1]
             ranges.append(range)
         else:
-            range[1] += len(pfx)
+            range[1] += pfx.len()
 
     def fmtrange(start_int, end_int):
         # bail out early for singletons..
