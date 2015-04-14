@@ -150,3 +150,13 @@ def test_integration():
 def test_patched():
     prettyip.patch_ipy()
     eq_(str(s('1.0.0.0/25', '1.0.0.128/25')), '1.0.0.0/24')
+
+
+def test_format_range():
+    eq_(prettyip.fmtrange(16, 16), (0.25, '0.0.0.16'))
+    eq_(prettyip.fmtrange(16, 31), (0.5, '0.0.0.16/28'))
+    eq_(prettyip.fmtrange(
+        IP('10.0.0.0').int(),
+        IP('11.0.0.0').int(),
+        ),
+        (5.0, '1{0.0.0.0-1.0.0.0}'))

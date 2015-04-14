@@ -27,6 +27,30 @@ def empty(ipset):
         yield (0.0, 'nothing')
 
 
+def fmtrange(start_int, end_int):
+    # bail out early for singletons..
+    if start_int == end_int:
+        return 0.25, str(IP(start_int))
+    # and for CIDR ranges
+    bit_diff_exp = POWERS_OF_2.get((start_int ^ end_int) + 1)
+    if bit_diff_exp is not None:
+        return 0.5, '{0!s}/{1!s}'.format(IP(start_int), 32 - bit_diff_exp)
+    # otherwise make a dashed range
+    start, end = str(IP(start_int)), str(IP(end_int))
+    prefix = os.path.commonprefix([start, end])
+    pfxlen = len(prefix)
+    start, end = start[pfxlen:], end[pfxlen:]
+    # calculate th score for this range, penalizing for shorter
+    # prefixes (longer dashed ranges) and for not ending on a dot
+    score = 4.0 - prefix.count('.')
+    if not prefix:
+        # wrapping {..} around the whole ipset is not readable!
+        score += 100.0
+    elif prefix[-1] != '.':
+        score += 1.0
+    return score, '{0}{{{1}-{2}}}'.format(prefix, start, end)
+
+
 @representer
 def dashed_range(ipset):
     if len(ipset.prefixes) == 0:
@@ -41,29 +65,6 @@ def dashed_range(ipset):
             ranges.append(range)
         else:
             range[1] += pfx.len()
-
-    def fmtrange(start_int, end_int):
-        # bail out early for singletons..
-        if start_int == end_int:
-            return 0.25, str(IP(start_int))
-        # and for CIDR ranges
-        bit_diff_exp = POWERS_OF_2.get((start_int ^ end_int) + 1)
-        if bit_diff_exp is not None:
-            return 0.5, '{0!s}/{1!s}'.format(IP(start_int), 32 - bit_diff_exp)
-        # otherwise make a dashed range
-        start, end = str(IP(start_int)), str(IP(end_int))
-        prefix = os.path.commonprefix([start, end])
-        pfxlen = len(prefix)
-        start, end = start[pfxlen:], end[pfxlen:]
-        # calculate th score for this range, penalizing for shorter
-        # prefixes (longer dashed ranges) and for not ending on a dot
-        score = 4.0 - prefix.count('.')
-        if not prefix:
-            # wrapping {..} around the whole ipset is not readable!
-            score += 100.0
-        elif prefix[-1] != '.':
-            score += 1.0
-        return score, '{0}{{{1}-{2}}}'.format(prefix, start, end)
 
     scored_formats = [fmtrange(s, e) for s, e in ranges]
     score = sum(range_score for (range_score, _) in scored_formats)
