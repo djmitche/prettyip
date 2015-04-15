@@ -83,11 +83,6 @@ def except_for(ipset):
     if len(ipset.prefixes) < 3:
         return
 
-    def mkip(net, prefixlen):
-        ip = IP(net)
-        ip._prefixlen = prefixlen
-        return ip
-
     def ipset_in_ip(ipset, ip):
         for prefix in ipset.prefixes:
             if prefix not in ip:
