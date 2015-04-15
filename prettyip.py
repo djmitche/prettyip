@@ -5,7 +5,7 @@
 from IPy import IP, IPSet
 import os
 
-POWERS_OF_2 = dict((2 ** n, n) for n in range(0, 32 + 1))
+POWERS_OF_2 = dict((2 ** n, n) for n in range(1, 32 + 1))
 
 representers = []
 

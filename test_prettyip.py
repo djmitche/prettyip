@@ -154,7 +154,9 @@ def test_patched():
 
 def test_format_range():
     eq_(prettyip.fmtrange(16, 16), (0.25, '0.0.0.16'))
+    eq_(prettyip.fmtrange(0, 2 ** 1 - 1), (0.5, '0.0.0.0/31'))
     eq_(prettyip.fmtrange(16, 31), (0.5, '0.0.0.16/28'))
+    eq_(prettyip.fmtrange(0, 2 ** 32 - 1), (0.5, '0.0.0.0/0'))
     eq_(prettyip.fmtrange(
         IP('10.0.0.0').int(),
         IP('11.0.0.0').int(),
