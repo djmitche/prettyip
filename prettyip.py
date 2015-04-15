@@ -71,6 +71,12 @@ def dashed_range(ipset):
     yield score, ", ".join(range_fmt for (_, range_fmt) in scored_formats)
 
 
+def mkip(net, prefixlen):
+    ip = IP(net)
+    ip._prefixlen = prefixlen
+    return ip
+
+
 @representer
 def except_for(ipset):
     # this isn't worth it for simple sets

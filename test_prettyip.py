@@ -160,3 +160,9 @@ def test_format_range():
         IP('11.0.0.0').int(),
         ),
         (5.0, '1{0.0.0.0-1.0.0.0}'))
+
+
+def test_make_ip():
+    ip = prettyip.mkip(16777216, 8)
+    eq_(ip._prefixlen, 8)
+    eq_(str(ip), '1.0.0.0/8')
