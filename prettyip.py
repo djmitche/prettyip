@@ -106,19 +106,7 @@ def except_for(ipset):
     if len(ipset.prefixes) < 3:
         return
 
-    lower = 0
-    smallest_containing = IP('0.0.0.0/0')
-    for bitlength in range(1, 24):
-        low_half = mkip(lower, bitlength)
-        if ipset_in_ip(ipset, low_half):
-            smallest_containing = low_half
-            continue
-        lower += 1 << (32 - bitlength)
-        high_half = mkip(lower, bitlength)
-        if ipset_in_ip(ipset, high_half):
-            smallest_containing = high_half
-            continue
-        break
+    smallest_containing = find_smallest(ipset)
 
     # if we found a CIDR block containing the whole IPSet,
     # try inverting it
