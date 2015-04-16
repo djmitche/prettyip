@@ -168,3 +168,18 @@ def test_make_ip():
     ip = prettyip.mkip(16777216, 8)
     eq_(ip._prefixlen, 8)
     eq_(str(ip), '1.0.0.0/8')
+
+
+def test_ipset():
+    ipset = s()
+    ip = prettyip.mkip(0, 0)
+    eq_(prettyip.ipset_in_ip(ipset, ip), True)
+    ipset = s('0.0.0.0/0')
+    ip = prettyip.mkip(0, 1)
+    eq_(prettyip.ipset_in_ip(ipset, ip), False)
+    ipset = s('0.0.0.0/1')
+    ip = prettyip.mkip(0, 1)
+    eq_(prettyip.ipset_in_ip(ipset, ip), True)
+    ipset = s('0.0.0.0/1', '128.0.0.0/1')
+    ip = prettyip.mkip(0, 1)
+    eq_(prettyip.ipset_in_ip(ipset, ip), False)

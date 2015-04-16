@@ -77,17 +77,18 @@ def mkip(net, prefixlen):
     return ip
 
 
+def ipset_in_ip(ipset, ip):
+    for prefix in ipset.prefixes:
+        if prefix not in ip:
+            return False
+    return True
+
+
 @representer
 def except_for(ipset):
     # this isn't worth it for simple sets
     if len(ipset.prefixes) < 3:
         return
-
-    def ipset_in_ip(ipset, ip):
-        for prefix in ipset.prefixes:
-            if prefix not in ip:
-                return False
-        return True
 
     lower = 0
     smallest_containing = IP('0.0.0.0/0')
