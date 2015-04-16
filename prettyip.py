@@ -100,6 +100,7 @@ def find_smallest(ipset):
         break
     return smallest_containing
 
+
 @representer
 def except_for(ipset):
     # this isn't worth it for simple sets
