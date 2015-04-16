@@ -183,3 +183,16 @@ def test_ipset():
     ipset = s('0.0.0.0/1', '128.0.0.0/1')
     ip = prettyip.mkip(0, 1)
     eq_(prettyip.ipset_in_ip(ipset, ip), False)
+
+
+def test_smallest():
+    ipset = s()
+    eq_(prettyip.find_smallest(ipset), IP('0.0.0.0/23'))
+    ipset = s('0.0.0.0/0')
+    eq_(prettyip.find_smallest(ipset), IP('0.0.0.0/0'))
+    ipset = s('0.0.0.0/1')
+    eq_(prettyip.find_smallest(ipset), IP('0.0.0.0/1'))
+    ipset = s('0.0.0.0/1', '128.0.0.0/1')
+    eq_(prettyip.find_smallest(ipset), IP('0.0.0.0/0'))
+    ipset = s('32.0.0.0/3', '64.0.0.0/3')
+    eq_(prettyip.find_smallest(ipset), IP('0.0.0.0/1'))
