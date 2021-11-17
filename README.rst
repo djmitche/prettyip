@@ -23,7 +23,7 @@ Explicitly::
     import prettyip
 
     my_ipset = IPSet([IP('10.0.0.0/8')]) - IPSet([IP('10.0.1.2')])
-    print prettyip.pretty_ipset(my_ipset)
+    print(prettyip.pretty_ipset(my_ipset))
 
 Or, monkey-patch IPy_::
 
@@ -32,7 +32,7 @@ Or, monkey-patch IPy_::
     prettyip.patch_ipy()
 
     my_ipset = IPSet([IP('10.0.0.0/8')]) - IPSet([IP('10.0.1.2')])
-    print my_ipset
+    print(my_ipset)
 
 Results
 -------
