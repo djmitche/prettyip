@@ -87,7 +87,7 @@ def ipset_in_ip(ipset, ip):
 def find_smallest(ipset):
     lower = 0
     smallest_containing = IP('0.0.0.0/0')
-    for bitlength in range(1, 24):
+    for bitlength in range(1, 24 + 1):
         low_half = mkip(lower, bitlength)
         if ipset_in_ip(ipset, low_half):
             smallest_containing = low_half

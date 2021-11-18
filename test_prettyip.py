@@ -94,6 +94,9 @@ def test_except_for():
         yield (t, s('0.0.0.0/0') - s('172.16.2.0/24'),
                [(100.9, '0.0.0.0/0 except reps_for(172.16.2.0/24)')])
 
+        yield (t, s('10.132.30.0/24') - s('10.132.30.90') - s('10.132.30.96'),
+               [(100.9, '10.132.30.0/24 except reps_for(10.132.30.90, 10.132.30.96)')])
+
 
 def test_prefix_list():
     with representer(prettyip.prefix_list):
@@ -190,7 +193,7 @@ def test_ipset():
 
 def test_smallest():
     ipset = s()
-    eq_(prettyip.find_smallest(ipset), IP('0.0.0.0/23'))
+    eq_(prettyip.find_smallest(ipset), IP('0.0.0.0/24'))
     ipset = s('0.0.0.0/0')
     eq_(prettyip.find_smallest(ipset), IP('0.0.0.0/0'))
     ipset = s('0.0.0.0/1')
